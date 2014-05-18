@@ -23,7 +23,7 @@
       document.body.appendChild( renderer.domElement );
       
       // Creating the cube and a material
-      var geometry = new THREE.CubeGeometry(1,1,1);
+      var geometry = new THREE.CubeGeometry(2,2,2);
       var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
       
       // The mesh applies a material to a geometry
@@ -38,6 +38,13 @@
       // Rendering
       function render() {
         requestAnimationFrame(render);
+  
+        cube.rotation.x += 0.01;
+        cube.rotation.z += 0.01;
+        cube.rotation.y += 0.01;
+        
+        // The cube ate an star from mario world!
+        cube.material.color.setRGB(Math.random(), Math.random(), Math.random());
         renderer.render(scene, camera);
       }
       render();
