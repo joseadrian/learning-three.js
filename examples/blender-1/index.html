@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>Importing from blender</title>
+    <style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+    <style>
+    body{ margin: 0; }
+    </style>
+    <script src="../../lib/three.min.js"></script>
+    <script src="../../lib/OrbitControls.js"></script>
+    <script>
+      // First, create the scene
+      var scene = new THREE.Scene();
+      
+      // Create a camera
+      var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+      camera.position.set( 4, 6, 5 );
+      
+      // Adding a Light, set position and add to the scene
+      var light = new THREE.PointLight(0xffffff);
+      light.position.set( -100, 200, 100 );
+      scene.add(light);
+
+      // A renderer to render the scene with the camera
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      
+      // Set the background color
+      renderer.setClearColorHex( 0x3F3F47, 1 );
+      
+      // Load in the mesh and add it to the scene.
+      var loader = new THREE.JSONLoader();
+      loader.load( "models/first.js", function(geometry){
+        
+        // Apply a material to geometry
+        var material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+        mesh = new THREE.Mesh(geometry, material);
+        scene.add(mesh);
+      });
+      
+      // Add OrbitControls so that we can pan around with the mouse.
+      var controls = new THREE.OrbitControls(camera, renderer.domElement);
+      
+      // Adding the renderer element to the HTML document
+      document.body.appendChild( renderer.domElement );       
+      
+      // Rendering
+      function render() {
+        requestAnimationFrame( render );
+        renderer.render( scene, camera );
+        
+        // Playing with the light position
+        light.position.set( camera.position.x * 100, camera.position.y * 100, camera.position.z * 100 );
+        
+        controls.update();
+      }
+      render();
+      
+      window.addEventListener('resize', function() {
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      });
+    </script>
+  </body>
+</html>
